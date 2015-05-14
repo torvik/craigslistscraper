@@ -1,0 +1,52 @@
+<p id="notice"><%= notice %></p>
+
+<div class="container">
+
+<%= render 'filter' %>
+
+<% if @posts.empty? %>
+  <hr>
+  <h3>No results found</h3>
+<% else %>
+
+  <table class="table table-hover table-condense">
+    <thead>
+      <tr>
+        <th class="center"> Preview </th>
+        <th class="center" width="45%">Heading</th>
+        <th class="center">Price</th>
+        <th class="center">Beds</th>
+        <th class="center">Baths</th>
+        <th class="center">Neighborhood</th>
+        <th class="center">Last Updated</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @posts.each do |post| %>
+        <tr>
+          <td width="13%" height="128px">
+          <%= link_to post_path(post) do %>
+           <% if post.images.empty? %>
+              <%= image_tag "http://instructorcomparison.com/wp-content/uploads/2015/02/no_photo_icon.png", class: "thumbnail" %>
+           <% else %>
+              <%= image_tag post.images.first.url, class: "thumbnail" %>
+           <% end %>
+          <% end %>
+          </td>
+          <td style="vertical-align:middle"><%= link_to post.heading, post %></td>
+          <td class="center" style="vertical-align:middle"><%= number_to_currency(post.price, precision: 0) %></td>
+          <td class="center" style="vertical-align:middle"><%= post.bedroons %></td>
+          <td class="center" style="vertical-align:middle"><%= post.bathrooms %> </td>
+          <td class="center" style="vertical-align:middle"><%= post.neighborhood %></td>
+          <td class="center" style="vertical-align:middle"><%= "#{time_ago_in_words(Time.at(post.timestamp.to_i))} ago" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= will_paginate @posts, renderer: BootstrapPagination::Rails  %>
+
+  <br>
+  <% end %>
+</div>
